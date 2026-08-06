@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login UI</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body class="bg-[#121212] min-h-screen flex items-center justify-center p-4 relative font-sans text-white select-none">
+
+    <!-- Back Arrow Button -->
+    <button id="backBtn"
+        class="absolute top-6 left-6 w-10 h-10 flex items-center justify-center bg-[#242424] rounded-full hover:bg-[#333] transition-colors focus:outline-none"
+        aria-label="Go back">
+        <i class="fas fa-arrow-left text-lg"></i>
+    </button>
+
+    <!-- Login Container Card -->
+    <main class="bg-[#242424] w-full max-w-[500px] rounded-2xl px-8 py-12 md:px-12 md:py-16 shadow-2xl text-center">
+
+        <!-- Header Text -->
+        <h1 class="text-4xl md:text-5xl font-normal tracking-wide mb-10 text-white">Login</h1>
+
+        <!-- Interactive Form -->
+        <form id="loginForm" class="space-y-6 text-left" novalidate>
+
+            <!-- Username Input Field Group -->
+            <div class="space-y-2">
+                <label for="username"
+                    class="block text-sm md:text-base font-normal tracking-wide text-[#CCCCCC]">Username</label>
+                <input type="text" id="username" name="username" required
+                    class="w-full h-11 bg-white text-black px-4 rounded-full border-0 focus:outline-none focus:ring-2 focus:ring-[#EE8133] transition-all text-base">
+            </div>
+
+            <!-- Password Input Field Group -->
+            <div class="space-y-2">
+                <label for="password"
+                    class="block text-sm md:text-base font-normal tracking-wide text-[#CCCCCC]">Password</label>
+                <input type="password" id="password" name="password" required
+                    class="w-full h-11 bg-white text-black px-4 rounded-full border-0 focus:outline-none focus:ring-2 focus:ring-[#EE8133] transition-all text-base">
+            </div>
+
+            <!-- Utility Actions Row (Remember / Forgot) -->
+            <div class="flex items-center justify-between text-xs md:text-sm pt-2 text-[#CCCCCC]">
+                <label class="flex items-center space-x-2 cursor-pointer group">
+                    <input type="checkbox" id="rememberMe"
+                        class="w-4 h-4 rounded border-gray-300 text-[#EE8133] focus:ring-[#EE8133] bg-transparent cursor-pointer">
+                    <span class="group-hover:text-white transition-colors">Remember me</span>
+                </label>
+                <a href="#" id="forgotPassword" class="hover:text-white hover:underline transition-colors">Forgot
+                    Password?</a>
+            </div>
+
+            <!-- Submit Submission Button Call-To-Action -->
+            <div class="pt-4 flex justify-center">
+                <button type="submit" id="submitBtn"
+                    class="w-44 h-11 bg-[#EE8133] text-white font-medium rounded-xl hover:bg-[#d66f25] active:scale-95 transition-all text-base shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#242424] focus:ring-[#EE8133]">
+                    Submit
+                </button>
+            </div>
+        </form>
+
+        <!-- Registration Route Context Switcher -->
+        <footer class="mt-8 text-xs md:text-sm text-[#CCCCCC]">
+            Don't have an account?
+            <a href="register.html" id="registerLink"
+                class="text-white underline hover:text-[#EE8133] transition-colors ml-1">Register</a>
+        </footer>
+    </main>
+
+    <!-- UI Interaction Scripts -->
+    <script>
+        $(document).ready(function () {
+            $('#loginForm').on('submit', function (e) {
+                e.preventDefault();
+
+                const username = $('#username').val().trim();
+                const password = $('#password').val();
+
+                if (!username || !password) {
+                    alert('Please fill out all fields.');
+                    return;
+                }
+
+                // Visual loading state
+                const $btn = $('#submitBtn');
+                $btn.prop('disabled', true).text('Verifying...');
+
+                // AJAX submission matching Express backend configured route
+                $.ajax({
+                    url: 'http://localhost:5000/api/login',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ username, password }),
+                    success: function (response) {
+                        // Backend returns status 200 on successful match
+                        window.location.href = 'home.html';
+                    },
+                    error: function (xhr) {
+                        // Revert loading button state
+                        $btn.prop('disabled', false).text('Submit');
+
+                        // Error handling matching backend message outputs
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            alert(xhr.responseJSON.message);
+                        } else {
+                            alert('An error occurred during submission. Please try again.');
+                        }
+                    }
+                });
+            });
+
+            // Navigation stubs
+            $('#backBtn').on('click', function () { window.history.back(); });
+            $('#forgotPassword').on('click', function (e) { e.preventDefault(); });
+        });
+    </script>
+</body>
+
+</html>
