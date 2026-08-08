@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 require("node:dns/promises").setServers(["1.1.1.1", "8.8.8.8"]);
 
@@ -11,7 +12,8 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); 
+app.use(bodyParser.json()) // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // Allow all cross-origin requests 
 app.use(cors()); 
