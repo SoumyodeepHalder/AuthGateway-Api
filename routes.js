@@ -28,6 +28,10 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.get('/login', async (req, res) => {
+    res.status(200).json({ message: 'Login successful'});
+});
+
 // READ: Get user profile details
 router.get('/user/:id', async (req, res) => {
     try {
