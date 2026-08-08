@@ -18,6 +18,10 @@ app.use(cors());
 // Base Route Integration
 app.use('/api', userRoutes);
 
+app.get('/', (req, res) => {
+  res.send('Welcome to the homepage!');
+});
+
 // Database Connection and Server Startup
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('Successfully connected to MongoDB Database.'))
