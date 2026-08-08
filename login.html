@@ -93,7 +93,7 @@
 
                 // AJAX submission matching Express backend configured route
                 $.ajax({
-                    url: 'http://localhost:5000/api/login',
+                    url: 'https://auth-gateway-api-fawn.vercel.app/api/login',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({ username, password }),
