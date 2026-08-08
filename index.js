@@ -8,6 +8,7 @@ require("node:dns/promises").setServers(["1.1.1.1", "8.8.8.8"]);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+MONGO_URI = "mongodb+srv://soumyodeep2:soumyodeep2@cluster0.d7uxyws.mongodb.net/sample_mflix";
 
 // Middleware
 app.use(express.json());
@@ -23,7 +24,7 @@ app.get('/', (req, res) => {
 });
 
 // Database Connection and Server Startup
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI ||MONGO_URI)
     .then(() => console.log('Successfully connected to MongoDB Database.'))
     .catch((error) => console.error('Database connection error:', error.message));
 
